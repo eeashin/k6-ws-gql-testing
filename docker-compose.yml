@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  ws-whiteboard:
+    image: eashin/ws-app:latest
+    ports:
+      - "3500:3500"  
+    restart: always 
