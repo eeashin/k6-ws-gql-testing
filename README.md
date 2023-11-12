@@ -9,11 +9,12 @@
 ## Run the app 
 
 ```
-$ docker compose up -d
+docker compose up -d
 ```
 
 ## Run the test
 
 ```
-$ k6 run ws-load-test.js
+k6 run --out csv=test_results.csv ws-load-test.js
+
 ```

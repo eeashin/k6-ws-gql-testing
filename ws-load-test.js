@@ -1,39 +1,29 @@
 import ws from 'k6/ws';
-import { check, sleep } from 'k6';
+import { sleep, check } from 'k6';
 
 export const options = {
-  vus: 10,
-  duration: '30s',
+    vus: 10,
+    duration: '10s',
 };
 
 export default function () {
-  const url = 'http://localhost:3500';
-  const params = {
-    tags: { my_tag: 'chat app test' },
-  };
+    const url = 'ws://localhost:3500';
+    const params = { tags: { my_tag: 'my ws session' } };
 
-  const res = ws.connect(url, params, function (socket) {
-    socket.on('open', function open() {
-      console.log(`VU ${__VU}: connected`);
-
-      // Simulate sending messages
-      sendMessage(socket, `Hello from VU ${__VU}`);
+    const res = ws.connect(url, params, function (socket) {
+        // Simulate sending messages
+        simulateSendMessage(socket, 5);
     });
 
-    socket.on('message', function (data) {
-      console.log(`VU ${__VU} received: ${data}`);
-    });
-
-    socket.on('close', function close() {
-      console.log(`VU ${__VU}: disconnected`);
-    });
-  });
-
-  check(res, { 'Connected successfully': (r) => r && r.status === 101 });
+    // Check if the connection was successful
+    check(res, { 'Connected successfully': (r) => r && r.status === 101 });
 }
 
-// Function to simulate sending messages
-function sendMessage(socket, message) {
-  socket.send(JSON.stringify({ event: 'message', data: message }));
-  sleep(1); // Introduce some delay between messages
+function simulateSendMessage(socket, count) {
+    for (let i = 0; i < count; i++) {
+        const message = `Hello from VU ${__VU} - ${i}`;
+        socket.send(JSON.stringify({ event: 'message', text: message }));
+        console.log(`VU ${__VU} sent message: ${message}`);
+        sleep(1); // Introduce a 1-second delay between messages
+    }
 }
