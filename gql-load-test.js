@@ -7,7 +7,7 @@ export const options = {
 };
 
 export default function () {
-    const url = 'ws://localhost:3500';
+    const url = 'ws://localhost:3501';
     const params = { tags: { my_tag: 'my ws session' } };
 
     const startTime = new Date();

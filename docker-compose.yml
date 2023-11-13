@@ -1,8 +1,12 @@
 version: '3'
 
 services:
-  ws-whiteboard:
+  ws-app:
     image: eashin/ws-app:latest
     ports:
       - "3500:3500"  
     restart: always 
+  gql-app:
+    image: eashin/gql-app:latest
+    ports:
+     - "3501:3501"
